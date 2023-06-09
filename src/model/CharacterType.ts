@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 
-export interface Character {
+export interface CharacterType {
     x: number;
     y: number;
     speed: number;
@@ -9,7 +9,7 @@ export interface Character {
 }
 
 export const useCharacter = (x: number = 0, y: number = 0, speed: number = 0) => {
-  const character = ref<Character>({
+  const character = ref<CharacterType>({
     x,
     y,
     speed,

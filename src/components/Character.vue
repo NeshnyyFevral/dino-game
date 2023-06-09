@@ -3,12 +3,8 @@
     ref="character"
     :class="[
       $style.root,
-      data.isJumping && $style.jump
+      gameStore.isRun && data.isJumping && $style.jump
     ]"
-    :style="{
-      'left': `${data.x}px`,
-      'bottom': `${data.y}px`,
-    }"
     @animationend="emits('jumpEnd')"
   >
     @
@@ -18,50 +14,58 @@
 <script setup lang="ts">
 import {
   computed,
-  onMounted, ref, watch,
+  onMounted,
+  ref,
+  watchEffect,
 } from 'vue';
 
-import type { Character } from '@/model/Character';
+import type { CharacterType } from '@/model/CharacterType';
+import { useGameStore } from '@/stores/Game';
 
 interface PropsType {
-  data: Character
+  data: CharacterType
 }
 
 interface EmitsType {
   (e: 'jumpEnd');
-  (e: 'bounding-data', value: DOMRect);
+  (e: 'getCharacterRef', value: HTMLDivElement);
 }
 
 const props = defineProps<PropsType>();
 const emits = defineEmits<EmitsType>();
 
+const gameStore = useGameStore();
+
 const character = ref<HTMLDivElement | null>(null);
 const isRun = ref<boolean>(false);
+
+const left = computed<string>(() => `${props.data.x}px`);
+const bottom = computed<string>(() => `100% - ${props.data.y}px`);
 
 onMounted(() => {
   isRun.value = true;
 });
 
-let timer: number;
-watch(() => props.data.isJumping, () => {
-  if (props.data.isJumping) {
-    timer = setInterval(() => {
-      emits('bounding-data', character.value!.getBoundingClientRect());
-    }, 30);
-  } else {
-    clearInterval(timer);
+watchEffect(() => {
+  if (character.value !== null) {
+    emits('getCharacterRef', <HTMLDivElement>character.value);
   }
-}, { deep: true });
+});
 </script>
 
 <style module lang="scss">
 .root {
+  --character-left: v-bind(left);
+  --character-bottom: v-bind(bottom);
+
   position: absolute;
+  left: var(--character-left);
+  bottom: var(--character-bottom);
   font-size: 30px;
 }
 
 .jump {
-  animation: isJump 1s;
+  animation: isJump 0.7s;
 }
 
 @keyframes isJump {
@@ -70,7 +74,7 @@ watch(() => props.data.isJumping, () => {
   }
 
   50% {
-    bottom: 50px;
+    bottom: 70px;
   }
 
   100% {

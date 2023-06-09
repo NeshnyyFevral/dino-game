@@ -9,8 +9,12 @@
     "@vue/eslint-config-typescript"
   ],
   "parserOptions": {
+    "parser": "@typescript-eslint/parser",
     "ecmaVersion": "latest",
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaFeatures" : {
+      "jsx": false
+    }
   },
   "plugins": [
     "simple-import-sort",
