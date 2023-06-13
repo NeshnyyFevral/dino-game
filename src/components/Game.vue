@@ -7,6 +7,9 @@
       >
         {{ textStartStopButton }}
       </button>
+      <div :class="$style.gamePoints">
+        {{ gamePoints }} GP (level {{ gameStore.level + 1 }})
+      </div>
     </div>
 
     <Character
@@ -35,13 +38,14 @@ import {
 import Character from '@/components/Character.vue';
 import Traps from '@/components/Traps.vue';
 import { useCharacter } from '@/model/CharacterType';
-import { random, sleep } from '@/model/Helpers';
+import { random, random7525 } from '@/model/Helpers';
 import { TrapsRefType, useTraps } from '@/model/TrapType';
 import { useGameStore } from '@/stores/Game';
 
 let timer: number;
+let oldGamePoint: number = 0;
 
-const { characterData, jump } = useCharacter(200, 0, 5);
+const { characterData, jump } = useCharacter(200, 0);
 const {
   trapsData,
   addTrap,
@@ -51,8 +55,12 @@ const gameStore = useGameStore();
 
 const character = ref<HTMLDivElement | null>(null);
 const traps = ref<TrapsRefType>({});
+const oldTime = ref<number>(0);
+const newTime = ref<number>(0);
 
 const textStartStopButton = computed<string>(() => (gameStore.isRun ? 'Stop game' : 'Start game'));
+const timeAlive = computed<number>(() => newTime.value - oldTime.value);
+const gamePoints = computed<number>(() => Math.floor(timeAlive.value / 100));
 
 const intersectionHandler = (character: HTMLDivElement, trap: HTMLDivElement) => {
   const characterRect = character.getBoundingClientRect();
@@ -61,14 +69,13 @@ const intersectionHandler = (character: HTMLDivElement, trap: HTMLDivElement) =>
   const valueInRange = (value: number, min: number, max: number) => (value >= min) && (value <= max);
 
   const xIntersection = valueInRange(characterRect.left, trapRect.left, trapRect.right)
-    || valueInRange(trapRect.left, characterRect.left, characterRect.right);
+      || valueInRange(trapRect.left, characterRect.left, characterRect.right);
 
   const yIntersection = valueInRange(characterRect.top, trapRect.top, trapRect.bottom)
       || valueInRange(trapRect.top, characterRect.top, characterRect.bottom);
 
   if (xIntersection && yIntersection) {
     gameStore.stopGame();
-    // alert('Intersection!');
   }
 };
 
@@ -83,32 +90,14 @@ const keyEventHandler = (event: KeyboardEvent) => {
   }
 };
 
-const nextTick = (gameId: string) => {
-  if (trapsData.value.length < gameStore.countOfTraps) {
-    addTrap(random(0, 70));
-  }
+const nextTick = () => {
+  newTime.value = Date.now();
   if (character.value && Object.values(traps.value).every((trap) => !!trap)) {
     Object.values(traps.value).forEach((trap) => {
       intersectionHandler(<HTMLDivElement>character.value, <HTMLDivElement>trap);
     });
   }
 };
-
-watch(() => gameStore.isRun, async () => {
-  trapsData.value = [];
-
-  if (gameStore.isRun) {
-    timer = window.setInterval(nextTick, 1000 / gameStore.FPS);
-
-    gameStore.countOfTraps = 1;
-    await sleep(2000);
-    gameStore.countOfTraps = 2;
-    await sleep(1750);
-    gameStore.countOfTraps = 3;
-  } else {
-    clearInterval(timer);
-  }
-});
 
 const localeRemoveTrap = (id: string) => {
   removeTrap(id);
@@ -121,6 +110,44 @@ onMounted(async () => {
 
 onUnmounted(() => {
   window.removeEventListener('keydown', keyEventHandler);
+});
+
+watch(() => gameStore.isRun, async () => {
+  trapsData.value = [];
+
+  if (gameStore.isRun) {
+    oldTime.value = Date.now();
+    newTime.value = Date.now();
+    gameStore.level = 0;
+
+    addTrap(0);
+
+    timer = window.setInterval(nextTick, 1000 / gameStore.FPS);
+  } else {
+    oldGamePoint = 0;
+    clearInterval(timer);
+  }
+});
+
+watch(() => gamePoints.value, () => {
+  const newGamePoint = gamePoints.value;
+
+  if (oldGamePoint !== newGamePoint) {
+    if (newGamePoint % 100 === 0) {
+      gameStore.level += 1;
+      trapsData.value = [];
+    }
+
+    if (newGamePoint % 15 === 0) {
+      const type = <0 | 1>random7525(0, 1);
+      if (type === 0) {
+        addTrap(0, type);
+      } else {
+        addTrap(random(60, 80), type);
+      }
+    }
+    oldGamePoint = newGamePoint;
+  }
 });
 </script>
 
@@ -138,9 +165,17 @@ onUnmounted(() => {
 }
 
 .actions {
+  width: 98%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   position: absolute;
   top: 20px;
   left: 10px;
+}
+
+.gamePoints {
+  font-size: 30px;
 }
 
 .button {

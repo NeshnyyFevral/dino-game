@@ -3,13 +3,11 @@ import { ref } from 'vue';
 
 export const useGameStore = defineStore('game', () => {
   const isRun = ref<boolean>(false);
-  const gameId = ref<string>('');
   const FPS: number = 60;
-  const countOfTraps = ref<number>(0);
+  const level: number = 0;
 
   const startGame = () => {
     isRun.value = true;
-    gameId.value = Math.random().toString(16).substring(2, 8);
   };
 
   const stopGame = () => {
@@ -17,11 +15,10 @@ export const useGameStore = defineStore('game', () => {
   };
 
   return {
-    gameId,
+    level,
     isRun,
     startGame,
     stopGame,
     FPS,
-    countOfTraps,
   };
 });

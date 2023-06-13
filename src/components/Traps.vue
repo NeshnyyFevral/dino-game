@@ -7,7 +7,14 @@
       @get-trap-ref="setTrapRef"
       @remove-trap="emits('removeTrap', item.id)"
     >
-      III
+      <img
+        :class="[
+          $style.image,
+          item.type === 0 && $style.zombie
+        ]"
+        :src="item.type === 0 ? 'src/assets/zombie.gif' : 'src/assets/bat.gif'"
+        alt="trap"
+      >
     </Trap>
   </div>
 </template>
@@ -48,6 +55,16 @@ watchEffect(() => {
 
 <style module lang="scss">
 .traps {
+  display: block;
+}
 
+.image {
+  border-radius: 50%;
+  width: 60px;
+  height: 50px;
+}
+
+.zombie {
+  transform: rotateY(180deg) ;
 }
 </style>

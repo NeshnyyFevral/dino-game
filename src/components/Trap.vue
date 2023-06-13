@@ -36,8 +36,10 @@ const emits = defineEmits<EmitsType>();
 const gameStore = useGameStore();
 
 const trap = ref<HTMLDivElement | null>(null);
+const startSpeed: number = 3;
 
 const bottom = computed<string>(() => `${props.data.y}px`);
+const speed = computed<string>(() => `${Math.max(startSpeed - gameStore.level * 0.7, 0.5)}s`);
 
 onMounted(() => {
   emits('getTrapRef', <HTMLDivElement>trap.value, props.data.id);
@@ -47,15 +49,18 @@ onMounted(() => {
 <style module lang="scss">
 .root {
   --trap-bottom: v-bind(bottom);
+  --trap-speed: v-bind(speed);
 
-  opacity: 0;
+  opacity: 1;
   position: absolute;
   font-size: 38px;
   line-height: 26px;
+  z-index: 100;
 }
 
 .isMove {
-  animation: move 3s;
+  animation: move;
+  animation-duration: var(--trap-speed);
 }
 
 @keyframes move {
