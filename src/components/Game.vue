@@ -6,11 +6,12 @@
       failed && $style.failed
     ]"
     @animationend="levelUp = false, failed = false"
+    @click="jump()"
   >
     <div :class="$style.actions">
       <button
         :class="$style.button"
-        @click.prevent="gameStore.isRun ? gameStore.stopGame() : gameStore.startGame()"
+        @click.stop="gameStore.isRun ? gameStore.stopGame() : gameStore.startGame()"
       >
         {{ textStartStopButton }}
       </button>
