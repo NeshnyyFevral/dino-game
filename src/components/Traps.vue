@@ -12,7 +12,7 @@
           $style.image,
           item.type === 0 && $style.zombie
         ]"
-        :src="item.type === 0 ? 'src/assets/zombie.gif' : 'src/assets/bat.gif'"
+        :src="item.type === 0 ? './src/assets/zombie.gif' : './src/assets/bat.gif'"
         alt="trap"
       >
     </Trap>

@@ -66,8 +66,7 @@ watchEffect(() => {
   z-index: 10;
   border-radius: 10px;
 
-  background: url("src/assets/character.png");
-  background-position: 0 2px;
+  background: url("./src/assets/character.png") 0 2px;
   background-size: 180px;
 }
 
