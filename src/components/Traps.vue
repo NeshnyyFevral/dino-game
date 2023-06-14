@@ -41,7 +41,7 @@ const trapsRef = ref<{[index: string]: HTMLDivElement}>({});
 
 const setTrapRef = (characterRef: HTMLDivElement, id: string) => {
   const trap = props.traps.find((trap) => trap.id === id);
-  trapsRef.value[trap.id] = characterRef;
+  trapsRef.value[trap!.id] = characterRef;
 };
 
 watchEffect(() => {

@@ -29,6 +29,7 @@ export default defineConfig({
       },
     }),
   ],
+  build: { outDir: './docs' },
   css: { modules: { generateScopedName: isDev ? generateRichClassName : undefined } },
   resolve: { alias: { '@': path.resolve(__dirname, './src') } },
 });

@@ -26,8 +26,8 @@ interface PropsType {
 }
 
 interface EmitsType {
-  (e: 'jumpEnd');
-  (e: 'getCharacterRef', value: HTMLDivElement);
+  (e: 'jumpEnd'): void;
+  (e: 'getCharacterRef', value: HTMLDivElement): void;
 }
 
 const props = defineProps<PropsType>();

@@ -50,7 +50,7 @@ import Traps from '@/components/Traps.vue';
 import { appStorage } from '@/model/appStorage';
 import { useCharacter } from '@/model/CharacterType';
 import { random, random7525 } from '@/model/Helpers';
-import { TrapsRefType, useTraps } from '@/model/TrapType';
+import { type TrapsRefType, useTraps } from '@/model/TrapType';
 import { useGameStore } from '@/stores/Game';
 
 let timer: number;
