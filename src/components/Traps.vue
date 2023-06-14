@@ -59,7 +59,6 @@ watchEffect(() => {
 }
 
 .image {
-  border-radius: 50%;
   width: 60px;
   height: 50px;
 }

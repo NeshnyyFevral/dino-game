@@ -39,7 +39,7 @@ const trap = ref<HTMLDivElement | null>(null);
 const startSpeed: number = 3;
 
 const bottom = computed<string>(() => `${props.data.y}px`);
-const speed = computed<string>(() => `${Math.max(startSpeed - gameStore.level * 0.7, 0.5)}s`);
+const speed = computed<string>(() => `${Math.max(startSpeed - gameStore.level * 0.5, 0.7)}s`);
 
 onMounted(() => {
   emits('getTrapRef', <HTMLDivElement>trap.value, props.data.id);
@@ -56,6 +56,7 @@ onMounted(() => {
   font-size: 38px;
   line-height: 26px;
   z-index: 100;
+
 }
 
 .isMove {

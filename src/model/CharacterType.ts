@@ -1,5 +1,7 @@
 import { ref } from 'vue';
 
+import { useGameStore } from '@/stores/Game';
+
 export interface CharacterType {
     x: number;
     y: number;
@@ -8,6 +10,8 @@ export interface CharacterType {
 }
 
 export const useCharacter = (x: number = 0, y: number = 0) => {
+  const gameStore = useGameStore();
+
   const character = ref<CharacterType>({
     x,
     y,
@@ -16,6 +20,10 @@ export const useCharacter = (x: number = 0, y: number = 0) => {
   });
 
   const jump = () => {
+    if (!gameStore.isRun) {
+      gameStore.isRun = true;
+    }
+
     character.value.isJumping = true;
   };
 

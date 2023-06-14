@@ -1,5 +1,12 @@
 <template>
-  <div :class="$style.root">
+  <div
+    :class="[
+      $style.root,
+      levelUp && $style.levelUp,
+      failed && $style.failed
+    ]"
+    @animationend="levelUp = false, failed = false"
+  >
     <div :class="$style.actions">
       <button
         :class="$style.button"
@@ -9,6 +16,9 @@
       </button>
       <div :class="$style.gamePoints">
         {{ gamePoints }} GP (level {{ gameStore.level + 1 }})
+      </div>
+      <div :class="$style.gamePoints">
+        Record: {{ appStorage.get('maxGP') || '0' }}
       </div>
     </div>
 
@@ -37,6 +47,7 @@ import {
 
 import Character from '@/components/Character.vue';
 import Traps from '@/components/Traps.vue';
+import { appStorage } from '@/model/appStorage';
 import { useCharacter } from '@/model/CharacterType';
 import { random, random7525 } from '@/model/Helpers';
 import { TrapsRefType, useTraps } from '@/model/TrapType';
@@ -55,8 +66,12 @@ const gameStore = useGameStore();
 
 const character = ref<HTMLDivElement | null>(null);
 const traps = ref<TrapsRefType>({});
+
 const oldTime = ref<number>(0);
 const newTime = ref<number>(0);
+
+const levelUp = ref<boolean>(false);
+const failed = ref<boolean>(false);
 
 const textStartStopButton = computed<string>(() => (gameStore.isRun ? 'Stop game' : 'Start game'));
 const timeAlive = computed<number>(() => newTime.value - oldTime.value);
@@ -76,6 +91,7 @@ const intersectionHandler = (character: HTMLDivElement, trap: HTMLDivElement) =>
 
   if (xIntersection && yIntersection) {
     gameStore.stopGame();
+    failed.value = true;
   }
 };
 
@@ -85,6 +101,7 @@ const setTrapsRef = (trapsRef: TrapsRefType) => { traps.value = trapsRef; };
 const keyEventHandler = (event: KeyboardEvent) => {
   switch (event.key) {
   case ' ': jump(); break; // space
+  case 'Escape': gameStore.stopGame(); break; // esc
 
   default:
   }
@@ -133,9 +150,20 @@ watch(() => gamePoints.value, () => {
   const newGamePoint = gamePoints.value;
 
   if (oldGamePoint !== newGamePoint) {
+    const maxGamePoints = appStorage.get('maxGP');
+    console.log(maxGamePoints, newGamePoint);
+    if (maxGamePoints !== undefined) {
+      if (maxGamePoints < newGamePoint) {
+        appStorage.set('maxGP', newGamePoint);
+      }
+    } else {
+      appStorage.set('maxGP', newGamePoint);
+    }
+
     if (newGamePoint % 100 === 0) {
       gameStore.level += 1;
       trapsData.value = [];
+      levelUp.value = true;
     }
 
     if (newGamePoint % 15 === 0) {
@@ -160,8 +188,16 @@ watch(() => gamePoints.value, () => {
   left: 50%;
   display: flex;
   align-items: flex-end;
-  border: 1px solid #000;
+  border: 5px solid #000;
   width: 90%;
+}
+
+.levelUp {
+  animation: levelUp 0.5s step-start;
+}
+
+.failed {
+  animation: failed 0.5s step-start;
 }
 
 .actions {
@@ -170,7 +206,7 @@ watch(() => gamePoints.value, () => {
   align-items: center;
   justify-content: space-between;
   position: absolute;
-  top: 20px;
+  top: -50px;
   left: 10px;
 }
 
@@ -189,7 +225,7 @@ watch(() => gamePoints.value, () => {
     content: '';
     position: absolute;
     width: 100%;
-    height: 1px;
+    height: 2px;
     background: black;
     bottom: -20px;
     left: 0;
@@ -203,6 +239,18 @@ watch(() => gamePoints.value, () => {
   &:hover::after {
     transform: translateY(-20px);
     opacity: 1;
+  }
+}
+
+@keyframes levelUp {
+  to {
+    background: rgba(0, 255, 0, 0.1);
+  }
+}
+
+@keyframes failed {
+  to {
+    background: rgba(255, 0, 0, 0.1);
   }
 }
 </style>

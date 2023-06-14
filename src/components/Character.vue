@@ -4,7 +4,7 @@
     :class="[
       $style.root,
       gameStore.isRun && $style.move,
-      gameStore.isRun && data.isJumping && $style.jump
+      data.isJumping && $style.jump
     ]"
     @animationend="emits('jumpEnd')"
   />
@@ -64,6 +64,7 @@ watchEffect(() => {
   width: 35px;
   height: 40px;
   z-index: 10;
+  border-radius: 10px;
 
   background: url("src/assets/character.png");
   background-position: 0 2px;
@@ -75,16 +76,48 @@ watchEffect(() => {
 }
 
 .jump {
-  animation: isJump 0.8s cubic-bezier(0,.23,.02,1), move 0.85s infinite step-end;
+  animation: isJump 0.8s linear, move 0.85s infinite step-end;
 }
 
 @keyframes isJump {
   0% {
-    bottom: 0;
+    bottom: 10px;
+  }
+
+  10% {
+    bottom: 30px;
+  }
+
+  20% {
+    bottom: 50px;
+  }
+
+  30% {
+    bottom: 60px;
+  }
+
+  40% {
+    bottom: 70px;
   }
 
   50% {
     bottom: 80px;
+  }
+
+  60%  {
+    bottom: 70px;
+  }
+
+  70% {
+    bottom: 60px;
+  }
+
+  80% {
+    bottom: 50px;
+  }
+
+  90% {
+    bottom: 20px;
   }
 
   100% {
