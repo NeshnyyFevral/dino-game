@@ -231,8 +231,7 @@ watch(() => gamePoints.value, () => {
     left: 0;
     opacity: 0;
 
-    transition: opacity 0.2s,
-            transform 0.2s;
+    transition: opacity 0.2s, transform 0.2s;
     transition-timing-function: var(--transform-timing);
   }
 

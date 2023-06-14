@@ -56,7 +56,6 @@ onMounted(() => {
   font-size: 38px;
   line-height: 26px;
   z-index: 100;
-
 }
 
 .isMove {
