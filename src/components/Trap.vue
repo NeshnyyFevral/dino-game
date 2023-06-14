@@ -67,7 +67,7 @@ onMounted(() => {
   @for $i from 0% through 100% {
     #{$i} {
       opacity: 1;
-      left: calc(100% - $i);
+      right: $i;
       bottom: var(--trap-bottom);
     }
   }

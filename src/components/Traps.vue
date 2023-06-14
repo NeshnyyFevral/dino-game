@@ -8,11 +8,18 @@
       @remove-trap="emits('removeTrap', item.id)"
     >
       <img
+        v-if="item.type === 0"
         :class="[
           $style.image,
           item.type === 0 && $style.zombie
         ]"
-        :src="item.type === 0 ? './src/assets/zombie.gif' : './src/assets/bat.gif'"
+        src="../assets/zombie.gif"
+        alt="trap"
+      >
+      <img
+        v-else
+        :class="$style.image"
+        src="../assets/bat.gif"
         alt="trap"
       >
     </Trap>
