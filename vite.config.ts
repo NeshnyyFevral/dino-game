@@ -1,5 +1,3 @@
-import { fileURLToPath, URL } from 'node:url';
-
 import vitePluginVue from '@vitejs/plugin-vue';
 import path from 'path';
 import { defineConfig } from 'vite';
