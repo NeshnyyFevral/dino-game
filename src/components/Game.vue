@@ -220,6 +220,11 @@ watch(() => gamePoints.value, () => {
   position: absolute;
   top: -50px;
   left: 10px;
+
+  @media screen and (max-width: 530px) {
+    flex-direction: column;
+    top: -110px
+  }
 }
 
 .gamePoints {
