@@ -7,7 +7,12 @@
       data.isJumping && $style.jump
     ]"
     @animationend="emits('jumpEnd')"
-  />
+  >
+    <img
+      src="../assets/sonic.gif"
+      alt="trap"
+    >
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -61,13 +66,17 @@ watchEffect(() => {
   left: 10%;
   bottom: var(--character-bottom);
   font-size: 30px;
-  width: 35px;
-  height: 40px;
   z-index: 10;
   border-radius: 10px;
 
-  background: url("@/assets/character.png") 0 2px;
-  background-size: 180px;
+  img {
+    display: block;
+    width: 40px;
+    height: 40px;
+  }
+
+  //background: url("@/assets/character.png") 0 2px;
+  //background-size: 180px;
 }
 
 .move {

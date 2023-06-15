@@ -13,7 +13,7 @@
           $style.image,
           item.type === 0 && $style.zombie
         ]"
-        src="../assets/zombie.gif"
+        src="../assets/zombie1.gif"
         alt="trap"
       >
       <img
@@ -66,8 +66,8 @@ watchEffect(() => {
 }
 
 .image {
-  width: 60px;
-  height: 50px;
+  width: 80px;
+  height: 60px;
 
   @media screen and (max-width: 1000px) {
     width: 50px;
@@ -75,6 +75,6 @@ watchEffect(() => {
 }
 
 .zombie {
-  transform: rotateY(180deg) ;
+  //transform: rotateY(180deg) ;
 }
 </style>

@@ -62,7 +62,7 @@ import {
 let timer: number;
 let oldGamePoint: number = 0;
 
-const { characterData, jump } = useCharacter(200, 0);
+const { characterData, jump } = useCharacter(200, -2);
 const {
   trapsData,
   addTrap,
