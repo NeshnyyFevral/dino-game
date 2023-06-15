@@ -50,7 +50,12 @@ import Character from '@/components/Character.vue';
 import Traps from '@/components/Traps.vue';
 import { appStorage } from '@/model/appStorage';
 import { useCharacter } from '@/model/CharacterType';
-import { random, random7525 } from '@/model/Helpers';
+import {
+  intersection,
+  random6040,
+  randomBetween,
+  randomFrom,
+} from '@/model/Helpers';
 import { type TrapsRefType, useTraps } from '@/model/TrapType';
 import { useGameStore } from '@/stores/Game';
 
@@ -79,18 +84,7 @@ const timeAlive = computed<number>(() => newTime.value - oldTime.value);
 const gamePoints = computed<number>(() => Math.floor(timeAlive.value / 100));
 
 const intersectionHandler = (character: HTMLDivElement, trap: HTMLDivElement) => {
-  const characterRect = character.getBoundingClientRect();
-  const trapRect = trap.getBoundingClientRect();
-
-  const valueInRange = (value: number, min: number, max: number) => (value >= min) && (value <= max);
-
-  const xIntersection = valueInRange(characterRect.left, trapRect.left, trapRect.right)
-      || valueInRange(trapRect.left, characterRect.left, characterRect.right);
-
-  const yIntersection = valueInRange(characterRect.top, trapRect.top, trapRect.bottom)
-      || valueInRange(trapRect.top, characterRect.top, characterRect.bottom);
-
-  if (xIntersection && yIntersection) {
+  if (intersection(character, trap)) {
     gameStore.stopGame();
     failed.value = true;
   }
@@ -167,11 +161,11 @@ watch(() => gamePoints.value, () => {
     }
 
     if (newGamePoint % 15 === 0) {
-      const type = <0 | 1>random7525(0, 1);
+      const type = <0 | 1>random6040(0, 1);
       if (type === 0) {
         addTrap(0, type);
       } else {
-        addTrap(random(60, 80), type);
+        addTrap(randomBetween(60, 80), type);
       }
     }
     oldGamePoint = newGamePoint;
