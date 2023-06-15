@@ -68,6 +68,10 @@ watchEffect(() => {
 .image {
   width: 60px;
   height: 50px;
+
+  @media screen and (max-width: 1000px) {
+    width: 50px;
+  }
 }
 
 .zombie {

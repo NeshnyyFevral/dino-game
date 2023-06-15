@@ -58,7 +58,7 @@ watchEffect(() => {
   --character-bottom: v-bind(bottom);
 
   position: absolute;
-  left: var(--character-left);
+  left: 10%;
   bottom: var(--character-bottom);
   font-size: 30px;
   width: 35px;

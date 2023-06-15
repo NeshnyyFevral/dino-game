@@ -152,7 +152,6 @@ watch(() => gamePoints.value, () => {
 
   if (oldGamePoint !== newGamePoint) {
     const maxGamePoints = appStorage.get('maxGP');
-    console.log(maxGamePoints, newGamePoint);
     if (maxGamePoints !== undefined) {
       if (maxGamePoints < newGamePoint) {
         appStorage.set('maxGP', newGamePoint);
@@ -191,6 +190,18 @@ watch(() => gamePoints.value, () => {
   align-items: flex-end;
   border: 5px solid #000;
   width: 90%;
+
+  @media screen and (max-height: 500px) {
+    height: 300px;
+  }
+
+  @media screen and (max-height: 400px) {
+    height: 200px;
+  }
+
+  @media screen and (max-width: 1400px) {
+    width: 99%;
+  }
 }
 
 .levelUp {
@@ -212,6 +223,7 @@ watch(() => gamePoints.value, () => {
 }
 
 .gamePoints {
+  white-space: nowrap;
   font-size: 30px;
 }
 
@@ -221,6 +233,7 @@ watch(() => gamePoints.value, () => {
   font-size: 24px;
   border: none;
   cursor: pointer;
+  white-space: nowrap;
 
   &::after {
     content: '';
