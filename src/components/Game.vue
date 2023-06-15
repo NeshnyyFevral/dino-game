@@ -48,16 +48,16 @@ import {
 
 import Character from '@/components/Character.vue';
 import Traps from '@/components/Traps.vue';
-import { appStorage } from '@/model/appStorage';
 import { useCharacter } from '@/model/CharacterType';
+import { type TrapsRefType, useTraps } from '@/model/TrapType';
+import { useGameStore } from '@/stores/Game';
+import { appStorage } from '@/tools/AppStorageTools';
 import {
   intersection,
   random6040,
   randomBetween,
   randomFrom,
-} from '@/model/Helpers';
-import { type TrapsRefType, useTraps } from '@/model/TrapType';
-import { useGameStore } from '@/stores/Game';
+} from '@/tools/HelperTools';
 
 let timer: number;
 let oldGamePoint: number = 0;

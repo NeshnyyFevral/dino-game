@@ -1,4 +1,4 @@
-class AppStorage {
+class AppStorageTools {
   get(key: string): any {
     const item = localStorage.getItem(key);
     return item ? JSON.parse(item) : undefined;
@@ -13,4 +13,4 @@ class AppStorage {
   }
 }
 
-export const appStorage = new AppStorage();
+export const appStorage = new AppStorageTools();
