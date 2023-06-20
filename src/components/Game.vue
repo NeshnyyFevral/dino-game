@@ -11,11 +11,6 @@
       @animationend="levelUp = false, failed = false"
       @click="jump()"
     >
-      <img
-        src="../assets/background.jpg"
-        alt="bg"
-        width="0"
-      >
       <div :class="$style.actions">
         <button
           :class="$style.button"
@@ -67,8 +62,6 @@ import {
   randomBetween,
   randomFrom,
 } from '@/tools/HelperTools';
-
-import config from '../../public/config';
 
 let timer: number;
 let oldGamePoint: number = 0;
@@ -185,12 +178,11 @@ watch(() => gamePoints.value, () => {
 
 const backgroundColor = computed(() => {
   if (gameStore.level < 2) return '#FFFFFF';
-  if (gameStore.level < 4) return 'url("/dinooo/src/assets/background.jpg")';
   return '#000000';
 });
 
 const backgroundOpacity = computed(() => {
-  if (gameStore.level < 4) return '1';
+  if (gameStore.level < 3) return '1';
   return '0.3';
 });
 
@@ -206,7 +198,7 @@ const colorText = computed(() => {
   --color-text: v-bind(colorText);
   --background-opacity: v-bind(backgroundOpacity);
 
-  background: var(--background-color);
+  background-color: var(--background-color);
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%;
