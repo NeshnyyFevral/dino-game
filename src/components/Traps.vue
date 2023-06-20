@@ -14,13 +14,13 @@
           item.type === 0 && $style.zombie
         ]"
         src="../assets/zombie1.gif"
-        alt="trap"
+        alt="???"
       >
       <img
         v-else
         :class="$style.image"
         src="../assets/bat.gif"
-        alt="trap"
+        alt="???"
       >
     </Trap>
   </div>
