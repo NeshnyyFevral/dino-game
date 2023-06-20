@@ -1,39 +1,48 @@
 <template>
   <div
-    :class="[
-      $style.root,
-      levelUp && $style.levelUp,
-      failed && $style.failed
-    ]"
-    @animationend="levelUp = false, failed = false"
-    @click="jump()"
+    :class="$style.root"
   >
-    <div :class="$style.actions">
-      <button
-        :class="$style.button"
-        @click.stop="gameStore.isRun ? gameStore.stopGame() : gameStore.startGame()"
+    <div
+      :class="[
+        $style.wrapper,
+        levelUp && $style.levelUp,
+        failed && $style.failed
+      ]"
+      @animationend="levelUp = false, failed = false"
+      @click="jump()"
+    >
+      <img
+        src="../assets/background.jpg"
+        alt="bg"
+        width="0"
       >
-        {{ textStartStopButton }}
-      </button>
-      <div :class="$style.gamePoints">
-        {{ gamePoints }} GP (level {{ gameStore.level + 1 }})
+      <div :class="$style.actions">
+        <button
+          :class="$style.button"
+          @click.stop="gameStore.isRun ? gameStore.stopGame() : gameStore.startGame()"
+        >
+          {{ textStartStopButton }}
+        </button>
+        <div :class="$style.gamePoints">
+          {{ gamePoints }} GP (level {{ gameStore.level + 1 }})
+        </div>
+        <div :class="$style.gamePoints">
+          Record: {{ appStorage.get('maxGP') || '0' }}
+        </div>
       </div>
-      <div :class="$style.gamePoints">
-        Record: {{ appStorage.get('maxGP') || '0' }}
-      </div>
+
+      <Character
+        :data="characterData"
+        @jump-end="characterData.isJumping = false"
+        @get-character-ref="setCharacterRef"
+      />
+
+      <Traps
+        :traps="trapsData"
+        @update-traps-ref="setTrapsRef"
+        @remove-trap="localeRemoveTrap"
+      />
     </div>
-
-    <Character
-      :data="characterData"
-      @jump-end="characterData.isJumping = false"
-      @get-character-ref="setCharacterRef"
-    />
-
-    <Traps
-      :traps="trapsData"
-      @update-traps-ref="setTrapsRef"
-      @remove-trap="localeRemoveTrap"
-    />
   </div>
 </template>
 
@@ -58,6 +67,8 @@ import {
   randomBetween,
   randomFrom,
 } from '@/tools/HelperTools';
+
+import config from '../../public/config';
 
 let timer: number;
 let oldGamePoint: number = 0;
@@ -132,7 +143,7 @@ watch(() => gameStore.isRun, async () => {
     newTime.value = Date.now();
     gameStore.level = 0;
 
-    addTrap(0);
+    addTrap(-2);
 
     timer = window.setInterval(nextTick, 1000 / gameStore.FPS);
   } else {
@@ -163,7 +174,7 @@ watch(() => gamePoints.value, () => {
     if (newGamePoint % 15 === 0) {
       const type = <0 | 1>random6040(0, 1);
       if (type === 0) {
-        addTrap(0, type);
+        addTrap(-2, type);
       } else {
         addTrap(randomBetween(60, 80), type);
       }
@@ -171,19 +182,51 @@ watch(() => gamePoints.value, () => {
     oldGamePoint = newGamePoint;
   }
 });
+
+const backgroundColor = computed(() => {
+  if (gameStore.level < 2) return '#FFFFFF';
+  if (gameStore.level < 4) return 'url("/dinooo/src/assets/background.jpg")';
+  return '#000000';
+});
+
+const backgroundOpacity = computed(() => {
+  if (gameStore.level < 4) return '1';
+  return '0.3';
+});
+
+const colorText = computed(() => {
+  if (gameStore.level < 2) return '#000000';
+  return '#FFFFFF';
+});
 </script>
 
 <style module lang="scss">
 .root {
+  --background-color: v-bind(backgroundColor);
+  --color-text: v-bind(colorText);
+  --background-opacity: v-bind(backgroundOpacity);
+
+  background: var(--background-color);
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100vh;
+  padding-top: 50vh;
+  color: var(--color-text);
+
+  transition: background 0.2s, color 0.2s;
+}
+
+.wrapper {
   height: 400px;
   position: relative;
-  margin-top: 50vh;
   transform: translate(-50%, -50%);
   left: 50%;
   display: flex;
   align-items: flex-end;
-  border: 5px solid #000;
+  border: 5px solid var(--color-text);;
   width: 90%;
+  opacity: var(--background-opacity);
 
   @media screen and (max-height: 500px) {
     height: 300px;
@@ -233,13 +276,14 @@ watch(() => gamePoints.value, () => {
   border: none;
   cursor: pointer;
   white-space: nowrap;
+  color: var(--color-text);
 
   &::after {
     content: '';
     position: absolute;
     width: 100%;
     height: 2px;
-    background: black;
+    background: currentColor;
     bottom: -20px;
     left: 0;
     opacity: 0;

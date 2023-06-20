@@ -66,8 +66,8 @@ watchEffect(() => {
 }
 
 .image {
-  width: 80px;
-  height: 60px;
+  width: 70px;
+  height: 50px;
 
   @media screen and (max-width: 1000px) {
     width: 50px;
@@ -75,6 +75,6 @@ watchEffect(() => {
 }
 
 .zombie {
-  //transform: rotateY(180deg) ;
+  transform: rotateY(180deg);
 }
 </style>
