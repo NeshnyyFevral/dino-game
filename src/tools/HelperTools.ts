@@ -1,4 +1,5 @@
 export const randomBetween = (min: number, max: number): number => Math.floor(Math.random() * (max - min + 1) + min);
+export const randomFrom = (...args: number[]): number => args[Math.floor(Math.random() * args.length)];
 export const random6040 = (min: number, max: number): number => {
   const number = randomBetween(0, 10);
 
@@ -8,12 +9,6 @@ export const random6040 = (min: number, max: number): number => {
 
   return max;
 };
-export const randomFrom = (...args: number[]): number => {
-  console.log(Math.floor(Math.random() * args.length));
-  return args[Math.floor(Math.random() * args.length)];
-};
-// eslint-disable-next-line no-promise-executor-return
-export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const intersection = (firstDiv: HTMLDivElement, secondDiv: HTMLDivElement): boolean => {
   const characterRect = firstDiv.getBoundingClientRect();

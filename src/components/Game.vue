@@ -60,7 +60,6 @@ import {
   intersection,
   random6040,
   randomBetween,
-  randomFrom,
 } from '@/tools/HelperTools';
 
 let timer: number;
@@ -217,7 +216,7 @@ const colorText = computed(() => {
   display: flex;
   align-items: flex-end;
   border: 5px solid var(--color-text);;
-  width: 90%;
+  width: 98%;
   opacity: var(--background-opacity);
 
   @media screen and (max-height: 500px) {
